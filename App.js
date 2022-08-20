@@ -10,14 +10,14 @@ import Burger from "./assets/images/Burger.png";
 import ForecastItem from "./src/components/ForecastItem";
 
 export default function App() {
-  const [location, setLocation] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [lat, setLat] = useState("");
-  const [long, setLong] = useState("");
-  const [forecastData, setForecastData] = useState("");
-  const [weatherData, setWeatherData] = useState("");
-  const [currentImage, setCurrentImage] = useState("");
-  const [currentWeather, setCurrentWeather] = useState("");
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
+  const [forecastData, setForecastData] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  const [currentImage, setCurrentImage] = useState(null);
+  const [currentWeather, setCurrentWeather] = useState(null);
   const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=cfead38986512ca40aba0b76ac8b2bde&units=metric`;
   const [fontsLoaded] = useFonts({
     "DM-Sans": require("./assets/fonts/DMSans-Regular.ttf"),
@@ -34,12 +34,16 @@ export default function App() {
         return response.json();
       })
       .then((data) => {
-        setForecastData(data.list);
-        setWeatherData(data.list[0].main);
-        setCurrentWeather(data.list[0].weather[0]);
+        let weather = data;
+        setForecastData(weather.list);
+        setWeatherData(weather.list[0].main);
+        setCurrentWeather(weather.list[0].weather[0]);
         setCurrentImage(
-          `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
+          `https://openweathermap.org/img/wn/${weather.list[0].weather[0].icon}@2x.png`
         );
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 
@@ -67,6 +71,10 @@ export default function App() {
   }
 
   if (!fontsLoaded) {
+    return null;
+  }
+
+  if (!currentImage) {
     return null;
   }
 

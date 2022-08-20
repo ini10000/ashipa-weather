@@ -28,20 +28,18 @@ export default function App() {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-  const getWeatherData = (url) => {
+  const getWeatherData = async (url) => {
     fetch(url)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setForecastData(data.list);
         setWeatherData(data.list[0].main);
         setCurrentWeather(data.list[0].weather[0]);
         setCurrentImage(
           `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`
         );
-        console.log(data);
       });
   };
 
